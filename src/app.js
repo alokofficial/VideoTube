@@ -1,6 +1,7 @@
 import cors from "cors" 
 import cookieParser from "cookie-parser" 
 import express from "express" // import express to make node http server
+import userRouter from "./routes/user.routes.js"
 
 const app = express()  // initializes an express application instance
 
@@ -17,5 +18,8 @@ app.use(express.urlencoded({ //parses incoming requests with Content-Type: appli
 }))
 app.use(express.static("public")) //serves static files from the specified directory (public).
 app.use(cookieParser()); // used to parse the cookies attach to the client request object
+
+
+app.use("/api/v1/users", userRouter)
 
 export {app}
