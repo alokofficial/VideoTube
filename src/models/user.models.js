@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import jwt from "jsonwebtoken"
-import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken" // 3rd party authentication using jwt
+import bcrypt from "bcrypt" //3rd party password hashing
 
 const userSchema = new mongoose.Schema({
     fullName:{
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
     refreshToken:{
         type:String
     },
-    watchHistory:[
+    watchHistory:[  //array of objects
         {
             type:mongoose.Types.ObjectId,
             ref:"Video"
@@ -38,20 +38,20 @@ const userSchema = new mongoose.Schema({
 
 },{timestamps:true})
 
-userSchema.pre("save", async function(next){
+userSchema.pre("save", async function(next){ // pre hook is called before saving the document and keep in mind these are the middlewares so always call next and avoid the arrow function because it will not work, not have contex for this.
     if(!this.isModified("password")) return next();
 
-    this.password=await bcrypt(this.password,10)
-    next()
+    this.password=await bcrypt(this.password,10) // hashing the password with 10 rounds of hashing
+    next() // call next to move to the next middleware
     
 })
 
 userSchema.methods.isPasswordCorrect = async function(password){
-    return await bcrypt.compare(password,this.password)
+    return await bcrypt.compare(password,this.password) // compare the password with the hashed password
 }
 
 userSchema.methods.generateAccessToken = function(){
-    return jwt.sign({
+    return jwt.sign({ // jwt.sign requires an object then the secret key and options for exipiry
         _id:this._id,
         email:this.email,
         username:this.username,
