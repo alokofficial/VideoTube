@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function(next){ // pre hook is called before saving the document and keep in mind these are the middlewares so always call next and avoid the arrow function because it will not work, not have contex for this.
     if(!this.isModified("password")) return next();
 
-    this.password=await bcrypt(this.password,10) // hashing the password with 10 rounds of hashing
+    this.password=await bcrypt.hash(this.password,10) // hashing the password with 10 rounds of hashing
     next() // call next to move to the next middleware
     
 })

@@ -20,6 +20,6 @@ app.use(express.static("public")) //serves static files from the specified direc
 app.use(cookieParser()); // used to parse the cookies attach to the client request object
 
 
-app.use("/api/v1/users", userRouter)
+app.use("/api/v1/users", userRouter) // mounts the userRouter on the /api/v1/users path
 
 export {app}
